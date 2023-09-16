@@ -1,1 +1,10 @@
+Working on this file was definitey more difficult than the original excel assignment which felt like it took no time. 
 
+For this assignment, I really found myself not only scouring old notes and classes but also turning to stackoverflow for the first time.
+
+I definitely only used it for inspiration, I read over a lot of the comments that people had left and looked over the code and how they formatted it for similar projects. 
+
+My biggest sticking point was figuring out how to affiliate the ticker with the highest increase, decrease, and volume for the respective stocks. 
+Luckily, I asked the class and one of my classmates who went to tutoring walked me through how he managed to do it, then I replicated it in a similar way that actually worked with my code. 
+
+I did heavily use the class example on how to loop through excel sheets for the formatting on that and overall at the end felt like I walked away with a better grasp of how to use VBA than before. 
