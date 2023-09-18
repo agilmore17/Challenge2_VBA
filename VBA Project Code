@@ -1,0 +1,160 @@
+Sub stockchecker():
+
+'loop through all sheets
+
+Range("P1").Value = "Ticker"
+Range("Q1").Value = "Value"
+Range("O2").Value = "Greatest % Increase"
+Range("O3").Value = "Greatest % Decrease"
+Range("O4").Value = "Greatest Total Volume"
+
+Dim ws As Worksheet
+
+For Each ws In Worksheets
+
+    'set summary values in each ws
+    ws.Range("I1").Value = "Ticker"
+    ws.Range("J1").Value = "Yearly Change"
+    ws.Range("K1").Value = "Percent Change"
+    ws.Range("L1").Value = "Total Stock volume"
+
+    Dim volume As Double
+    volume = 0
+
+    Dim Summary As Integer
+    Summary = 2
+   
+    Dim WorksheetName As String
+ 
+    ' Determine last row
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+    'define ticker as true/false
+    For i = 2 To LastRow
+        Dim NextTicker As Boolean
+            If NextTicker = False Then
+                Dim Yearly_Opening_Price As Double
+                    Yearly_Opening_Price = ws.Cells(i, 3).Value
+                NextTicker = True
+            End If
+            
+    'if the cell is not within the same Ticker, then
+        If ws.Cells(i + 1, 1) <> ws.Cells(i, 1).Value Then
+        
+        'define ticker name
+            ticker = ws.Cells(i, 1).Value
+        
+        'add to volume total
+            volume = volume + ws.Cells(i, 7).Value
+        
+         'print the volume in Summary
+            ws.Range("L" & Summary).Value = volume
+        
+        'print the ticker in a Summary
+            ws.Range("I" & Summary).Value = ticker
+        
+        'calculate yearly change
+            YearlyChange = ws.Cells(i, 6).Value - Yearly_Opening_Price
+        
+        'print yearly change in Summary
+            ws.Range("J" & Summary).Value = YearlyChange
+        
+        'calculate % change
+            percentchange = (YearlyChange / Yearly_Opening_Price)
+        
+        'Print the % change
+            ws.Range("K" & Summary).Value = percentchange
+
+        'add one row to summary
+            Summary = Summary + 1
+        
+        'reset volume
+            volume = 0
+        
+        'rest ticker
+        NextTicker = False
+        
+            
+    'if the cell immediately following is the same ticker
+        Else
+        'add to the volume total
+             volume = volume + ws.Cells(i, 7).Value
+        End If
+    Next i
+    
+    'change coloring based on positive or negative changes based on length of last summary row
+    lastsummaryrow = ws.Cells(Rows.Count, 10).End(xlUp).Row
+  
+    For i = 2 To lastsummaryrow
+        If ws.Cells(i, 10) > 0 Then
+            ws.Cells(i, 10).Interior.ColorIndex = 4
+        Else
+            ws.Cells(i, 10).Interior.ColorIndex = 3
+        End If
+    Next i
+    'correct style to be percent
+        For i = 2 To lastsummaryrow
+            ws.Cells(i, 11).NumberFormat = "0.00%"
+        Next i
+     
+    'Set variables for holding percentage increase, decrease, and volume
+    Dim summ_percentchange As Double
+    Dim highincrease As Double
+    Dim highdecrease As Double
+    Dim volume1 As Double
+    Dim volume2 As Double
+    Dim ticker1 As String
+    Dim ticker2 As String
+    Dim ticker3 As String
+ 
+ 'if function for increase,decrease, volume
+    For i = 2 To lastsummaryrow
+        summ_percentchange = ws.Cells(i, 11).Value
+        If summ_percentchange > highincrease Then
+            highincrease = ws.Cells(i, 11).Value
+            ticker1 = ws.Cells(i, 9).Value
+        Else
+        End If
+    Next i
+    Cells(2, 16).Value = ticker1
+    Cells(2, 17).Value = highincrease
+    
+    For i = 2 To lastsummaryrow
+        summ_percentchange = ws.Cells(i, 11).Value
+        If summ_percentchange < highdecrease Then
+            highdecrease = ws.Cells(i, 11).Value
+            ticker2 = ws.Cells(i, 9).Value
+        End If
+    Next i
+    Cells(3, 16).Value = ticker2
+    Cells(3, 17).Value = highdecrease
+    
+    For i = 2 To lastsummaryrow
+        volume2 = ws.Cells(i, 12).Value
+        If volume2 > volume1 Then
+            volume1 = ws.Cells(i, 12).Value
+            ticker3 = ws.Cells(i, 9).Value
+        End If
+    Next i
+    Cells(4, 16).Value = ticker3
+    Cells(4, 17).Value = volume1
+    
+   
+'set summary value as percent
+    
+    For i = 2 To 3
+        ws.Cells(i, 17).NumberFormat = "0.00%"
+    Next i
+    
+'auto fit columns to proper size
+ws.Range("A:Z").Columns.AutoFit
+
+'loop to next  worksheet
+Next ws
+
+'add a message box to show completion! 
+MsgBox ("Stocks Analyzed")
+
+End Sub
+
+
